@@ -28,5 +28,8 @@ if(!address) {
 
 console.log('this will be the last text')
 
+console.log('this is the tutorial about collaborating on github')
+console.log('the tut is given by instructor Net Ninjs')
+
 
 
