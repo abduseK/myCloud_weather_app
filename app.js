@@ -22,6 +22,8 @@ if(!address) {
             
             console.log(data.location)
             console.log(forecastData)
+            console.log('Simple text on feature 1 branch')
+            console.log('simple update if it works')
         })
     })
 }
