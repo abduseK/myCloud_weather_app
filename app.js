@@ -22,6 +22,7 @@ if(!address) {
             
             console.log(data.location)
             console.log(forecastData)
+            console.log('this text will publish addition texts to check the changes I\' made for git')
         })
     })
 }
