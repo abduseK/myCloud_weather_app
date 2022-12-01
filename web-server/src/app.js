@@ -1,27 +1,62 @@
 const express = require('express')
 const path = require('path')
+const hbs = require('hbs')
 
 // console.log(path.join(__dirname, '../public'))
 
 const app = express()
-const publicDirectoryPath = path.join(__dirname, '../views')
+const publicDirctoryPath = path.join(__dirname, '../public')
+const viewsPath = path.join(__dirname, '../templates/views')
+const partialsPath = path.join(__dirname, '../templates/partials')
 
+// SetUP handlebars engine and views location
 app.set('view engine', 'hbs')
-app.set('views', publicDirectoryPath)
+app.set('views', viewsPath)
+hbs.registerPartials(partialsPath)
+
+// setUp static directory to serve
+app.use(express.static(publicDirctoryPath))
 
 app.get('/', (req, res) => {
     res.render('index', {
-        title: 'HomePage',
-        text: 'This will be the paragraph of the page'
+        title: 'Weather',
+        text: 'This will be the paragraph of the page',
+        name: 'Abdelselam Kemal'
     })
 })
 
 app.get('/about', (req, res) => {
-    res.render('about')
+    res.render('about', {
+        title: 'About',
+        name: 'Abdelselam Kemal'
+    })
 })
 
 app.get('/help', (req, res) => {
-    res.render('help')
+    res.render('help', {
+        title: 'Help',
+        helpText: 'What can we help u',
+        name: 'Abdelselam Kemal'
+    })
+})
+
+app.get('/help/*', (req, res) => {
+    res.render('404_page', {
+        title: '404',
+        errorMessage: 'Help article not found',
+        name: 'Abdelselam Kemal'
+
+    })
+})
+
+// why last 404 page: express looks each file, it stops if it finds a match
+
+app.get('*', (req, res) => {
+    res.render('404_page', {
+        title: '404',
+        errorMessage: 'Page not found',
+        name: 'Abdelselam Kemal'
+    })
 })
 
 app.listen(3000, () => {
