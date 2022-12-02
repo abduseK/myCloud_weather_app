@@ -2,6 +2,8 @@ const express = require('express')
 const path = require('path')
 const hbs = require('hbs')
 const { response } = require('express')
+const geocode = require('./utils/geocode')
+const forecast = require('./utils/forecast')
 
 // console.log(path.join(__dirname, '../public'))
 
@@ -21,7 +23,7 @@ app.use(express.static(publicDirctoryPath))
 app.get('/', (req, res) => {
     res.render('index', {
         title: 'Weather',
-        text: 'This will be the paragraph of the page',
+        text: 'Use this site get your weather',
         name: 'Abdelselam Kemal'
     })
 })
@@ -34,17 +36,29 @@ app.get('/about', (req, res) => {
 })
 
 app.get('/weather', (req, res) => {
+    const address = req.query.address
     if(!req.query.address) {
-        return res.send({
+        res.send({
             error: 'Address is not provided'
         })
-    }
+    } 
 
-    let address = req.query.address
-    res.send({
-        forecast: 'It is snowing',
-        location: 'london',
-        address: address
+    geocode(req.query.address, (error, { latitude, longitude, location} = {}) => {
+        if(error) {
+            return res.send({error})
+        }
+
+        forecast(latitude, longitude, (error, forecastData) => {
+            if(error) {
+                return res.send({error})
+            }
+
+            res.send({
+                forecast: forecastData,
+                location,
+                address: req.query.address
+            })
+        })
     })
 })
 
