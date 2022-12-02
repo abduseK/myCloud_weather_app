@@ -1,6 +1,7 @@
 const express = require('express')
 const path = require('path')
 const hbs = require('hbs')
+const { response } = require('express')
 
 // console.log(path.join(__dirname, '../public'))
 
@@ -29,6 +30,21 @@ app.get('/about', (req, res) => {
     res.render('about', {
         title: 'About',
         name: 'Abdelselam Kemal'
+    })
+})
+
+app.get('/weather', (req, res) => {
+    if(!req.query.address) {
+        return res.send({
+            error: 'Address is not provided'
+        })
+    }
+
+    let address = req.query.address
+    res.send({
+        forecast: 'It is snowing',
+        location: 'london',
+        address: address
     })
 })
 
